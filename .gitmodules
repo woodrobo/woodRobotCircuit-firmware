@@ -1,0 +1,6 @@
+[submodule "woodCurrentMD2-firmware/simple.X/wood_rs485"]
+	path = woodCurrentMD2-firmware/simple.X/wood_rs485
+	url = https://github.com/woodrobo/wood_rs485.git
+[submodule "woodBoard-firmware/firmware/src/wood_rs485"]
+	path = woodBoard-firmware/firmware/src/wood_rs485
+	url = https://github.com/woodrobo/wood_rs485.git

@@ -1,0 +1,14 @@
+configName: default
+folderName: woodBoard_cpp
+format_version: v1.0
+frameworkPath: ..\..\..\..\..\..\Harmony3
+processor: PIC32MZ2048EFH064
+projectName: woodBoard_cpp
+settings:
+  PackageFilter: bsp;core;csp;csp_apps_pic32mx;dev_packs;harmony-services;quick_docs;usb;usb_apps_device;usb_apps_host
+  FORCE_OPTIMIZATION: 'false'
+  GENERATE_BACKUP: 'true'
+  TRUSTZONE: 'false'
+  CMSISPath: .\dev_packs\arm\CMSIS\5.8.0
+  MERGE_STRATEGY: USER_ALL
+  DFPPath: .\dev_packs\Microchip\PIC32MZ-EF_DFP\1.3.58\atdf\PIC32MZ2048EFH064.atdf
