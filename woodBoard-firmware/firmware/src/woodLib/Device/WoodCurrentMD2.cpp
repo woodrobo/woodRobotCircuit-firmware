@@ -60,37 +60,43 @@ uint16_t WoodCurrentMD2::getCurrentSensor(){
 }
 
 void WoodCurrentMD2::communicate(){
-    WoodRS485Data send_data, recv_data;
+    for(int i=0;i<3;i++){
+        WoodRS485Data send_data, recv_data;
     
-    switch(this->mode){
-        case MODE_VOLTAGE:
-            send_data.size = 3;
-            send_data.data[0] = 0;
-            send_data.data[1] = (pwm >> 8) & 0xff;
-            send_data.data[2] = pwm & 0xff;
+        switch(this->mode){
+            case MODE_VOLTAGE:
+                send_data.size = 3;
+                send_data.data[0] = 0;
+                send_data.data[1] = (pwm >> 8) & 0xff;
+                send_data.data[2] = pwm & 0xff;
+                break;
+            case MODE_CURRENT:
+                send_data.size = 3;
+                send_data.data[0] = 1;
+                send_data.data[1] = (current >> 8) & 0xff;
+                send_data.data[2] = current & 0xff;
+                break;
+            default:
+                send_data.size = 3;
+                send_data.data[0] = 0;
+                send_data.data[1] = 0;
+                send_data.data[2] = 0;
+                break;
+        }
+
+        RS485Device::send(send_data);
+
+        this->is_valid = false;
+        if(RS485Device::recv(&recv_data, 1000)){
+            if(recv_data.sender_address == this->address && recv_data.size == 3){
+                this->is_valid = true;
+                this->current_sensor = ((recv_data.data[0] << 4) & 0xff0) | ((recv_data.data[1] >> 4) & 0x00f);
+                this->adc_port = ((recv_data.data[1] << 8) & 0xf00) | (recv_data.data[2] & 0x0ff);
+            }
+        }
+        
+        if(this->is_valid){
             break;
-        case MODE_CURRENT:
-            send_data.size = 3;
-            send_data.data[0] = 1;
-            send_data.data[1] = (current >> 8) & 0xff;
-            send_data.data[2] = current & 0xff;
-            break;
-        default:
-            send_data.size = 3;
-            send_data.data[0] = 0;
-            send_data.data[1] = 0;
-            send_data.data[2] = 0;
-            break;
-    }
-    
-    RS485Device::send(send_data);
-    
-    this->is_valid = false;
-    if(RS485Device::recv(&recv_data, 1000)){
-        if(recv_data.sender_address == this->address && recv_data.size == 3){
-            this->is_valid = true;
-            this->current_sensor = ((recv_data.data[0] << 4) & 0xff0) | ((recv_data.data[1] >> 4) & 0x00f);
-            this->adc_port = ((recv_data.data[1] << 8) & 0xf00) | (recv_data.data[2] & 0x0ff);
         }
     }
 }

@@ -202,6 +202,14 @@ void SYS_Initialize ( void* data )
     CORETIMER_Initialize();
 	UART1_Initialize();
 
+    TMR2_Initialize();
+
+    OCMP1_Initialize();
+
+    OCMP4_Initialize();
+
+    OCMP5_Initialize();
+
 	UART5_Initialize();
 
 

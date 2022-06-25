@@ -144,7 +144,7 @@ int main(void)
                         rs485_physical_layer_write(send_buf, send_size);
                         
                         //debug
-                        printf("cur:%u, adc:%u\r\n", current_sensor_vol, adc_port_vol);
+                        //printf("cur:%u, adc:%u\r\n", current_sensor_vol, adc_port_vol);
                     }
                 }
             }

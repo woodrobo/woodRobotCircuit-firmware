@@ -19,6 +19,16 @@
             <logicalFolder name="f3" displayName="gpio" projectFiles="true">
               <itemPath>../src/config/default/peripheral/gpio/plib_gpio.h</itemPath>
             </logicalFolder>
+            <logicalFolder name="f7" displayName="ocmp" projectFiles="true">
+              <itemPath>../src/config/default/peripheral/ocmp/plib_ocmp_common.h</itemPath>
+              <itemPath>../src/config/default/peripheral/ocmp/plib_ocmp1.h</itemPath>
+              <itemPath>../src/config/default/peripheral/ocmp/plib_ocmp4.h</itemPath>
+              <itemPath>../src/config/default/peripheral/ocmp/plib_ocmp5.h</itemPath>
+            </logicalFolder>
+            <logicalFolder name="f6" displayName="tmr" projectFiles="true">
+              <itemPath>../src/config/default/peripheral/tmr/plib_tmr_common.h</itemPath>
+              <itemPath>../src/config/default/peripheral/tmr/plib_tmr2.h</itemPath>
+            </logicalFolder>
             <logicalFolder name="f1" displayName="uart" projectFiles="true">
               <itemPath>../src/config/default/peripheral/uart/plib_uart_common.h</itemPath>
               <itemPath>../src/config/default/peripheral/uart/plib_uart1.h</itemPath>
@@ -32,6 +42,9 @@
         </logicalFolder>
       </logicalFolder>
       <logicalFolder name="f2" displayName="woodLib" projectFiles="true">
+        <logicalFolder name="f3" displayName="Control" projectFiles="true">
+          <itemPath>../src/woodLib/Control/PID.h</itemPath>
+        </logicalFolder>
         <logicalFolder name="f1" displayName="Device" projectFiles="true">
           <itemPath>../src/woodLib/Device/RS485Device.h</itemPath>
           <itemPath>../src/woodLib/Device/WoodCurrentMD2.h</itemPath>
@@ -41,6 +54,7 @@
         </logicalFolder>
       </logicalFolder>
       <itemPath>../src/wood_rs485/wood_rs485.h</itemPath>
+      <itemPath>../src/EyesController.h</itemPath>
     </logicalFolder>
     <logicalFolder name="LinkerScript"
                    displayName="Linker Files"
@@ -69,6 +83,14 @@
             <logicalFolder name="f3" displayName="gpio" projectFiles="true">
               <itemPath>../src/config/default/peripheral/gpio/plib_gpio.c</itemPath>
             </logicalFolder>
+            <logicalFolder name="f7" displayName="ocmp" projectFiles="true">
+              <itemPath>../src/config/default/peripheral/ocmp/plib_ocmp1.c</itemPath>
+              <itemPath>../src/config/default/peripheral/ocmp/plib_ocmp4.c</itemPath>
+              <itemPath>../src/config/default/peripheral/ocmp/plib_ocmp5.c</itemPath>
+            </logicalFolder>
+            <logicalFolder name="f6" displayName="tmr" projectFiles="true">
+              <itemPath>../src/config/default/peripheral/tmr/plib_tmr2.c</itemPath>
+            </logicalFolder>
             <logicalFolder name="f1" displayName="uart" projectFiles="true">
               <itemPath>../src/config/default/peripheral/uart/plib_uart1.c</itemPath>
               <itemPath>../src/config/default/peripheral/uart/plib_uart5.c</itemPath>
@@ -83,6 +105,9 @@
         </logicalFolder>
       </logicalFolder>
       <logicalFolder name="f2" displayName="woodLib" projectFiles="true">
+        <logicalFolder name="f3" displayName="Control" projectFiles="true">
+          <itemPath>../src/woodLib/Control/PID.cpp</itemPath>
+        </logicalFolder>
         <logicalFolder name="f1" displayName="Device" projectFiles="true">
           <itemPath>../src/woodLib/Device/RS485Device.cpp</itemPath>
           <itemPath>../src/woodLib/Device/WoodCurrentMD2.cpp</itemPath>
@@ -93,6 +118,7 @@
       </logicalFolder>
       <itemPath>../src/main.cpp</itemPath>
       <itemPath>../src/wood_rs485/wood_rs485.c</itemPath>
+      <itemPath>../src/EyesController.cpp</itemPath>
     </logicalFolder>
     <logicalFolder name="ExternalFiles"
                    displayName="Important Files"
@@ -102,9 +128,13 @@
         <itemPath>../src/config/default/default.mhc/core_timer.yml</itemPath>
         <itemPath>../src/config/default/default.mhc/dfp.yml</itemPath>
         <itemPath>../src/config/default/default.mhc/GraphSettings.yml</itemPath>
+        <itemPath>../src/config/default/default.mhc/ocmp1.yml</itemPath>
+        <itemPath>../src/config/default/default.mhc/ocmp4.yml</itemPath>
+        <itemPath>../src/config/default/default.mhc/ocmp5.yml</itemPath>
         <itemPath>../src/config/default/default.mhc/project.yml</itemPath>
         <itemPath>../src/config/default/default.mhc/settings.yml</itemPath>
         <itemPath>../src/config/default/default.mhc/stdio.yml</itemPath>
+        <itemPath>../src/config/default/default.mhc/tmr2.yml</itemPath>
         <itemPath>../src/config/default/default.mhc/uart1.yml</itemPath>
         <itemPath>../src/config/default/default.mhc/uart5.yml</itemPath>
       </logicalFolder>

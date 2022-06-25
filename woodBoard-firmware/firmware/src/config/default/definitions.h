@@ -51,9 +51,13 @@
 #include <stdio.h>
 #include "peripheral/coretimer/plib_coretimer.h"
 #include "peripheral/uart/plib_uart1.h"
+#include "peripheral/tmr/plib_tmr2.h"
 #include "peripheral/clk/plib_clk.h"
 #include "peripheral/gpio/plib_gpio.h"
 #include "peripheral/evic/plib_evic.h"
+#include "peripheral/ocmp/plib_ocmp1.h"
+#include "peripheral/ocmp/plib_ocmp4.h"
+#include "peripheral/ocmp/plib_ocmp5.h"
 #include "peripheral/uart/plib_uart5.h"
 
 // DOM-IGNORE-BEGIN
