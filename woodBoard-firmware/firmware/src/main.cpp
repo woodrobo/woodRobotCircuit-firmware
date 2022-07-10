@@ -14,8 +14,8 @@
 #include "woodLib/Control/PID.h"
 #include "EyesController.h"
 
-Device::WoodCurrentMD2 motor1(11);
-Device::WoodCurrentMD2 motor2(12);
+Device::WoodCurrentMD2 motor1(12);
+Device::WoodCurrentMD2 motor2(13);
 Device::EyesController eyes(21);
 
 Control::PID yaw_pid(50.0, 10.0, 0, 1000);
@@ -76,46 +76,60 @@ int main(int argc, char** argv) {
 }
 
 void Framework::main_task(){  
-//    printf("[motor1 sensor]current:%u adc_port:%u\r\n", motor1.getCurrentSensor(), motor1.getADCPort());
-//    printf("               current:%d[mA]\r\n", (int)((float)(motor1.getCurrentSensor() - 2111) * ADVALUE_TO_MILLIAMPARE)); 
+    const float ADVALUE_TO_MILLIAMPARE = 3300.0 / 4096.0 / 66.0 * 1000.0;    //ACS712 30A -> 66mV/A
+    static int pwm = 0;
     
-    static bool is_first = true;
-    static float target_pitch = 90;
-    static bool is_down = true;
-    
-    if(motor1.isValid() && motor2.isValid()){
-        printf("[motor1]current:%d[mA] deg:%d\r\n", (int)yawCurrent(), (int)yawDeg());
-        printf("[motor2]current:%d[mA] deg:%d\r\n", (int)pitchCurrent(), (int)pitchDeg());
-        pwmServoSetDeg(0);
-        //eyes.setEyes(0, 0, 0);
+    if(motor1.isValid()){
+        printf("[motor1 sensor]current:%d adc_port:%u\r\n", motor1.getCurrentSensor(), motor1.getADCPort());
+        printf("               current:%d[mA]\r\n", (int)((float)motor1.getCurrentSensor() * ADVALUE_TO_MILLIAMPARE)); 
+        motor1.setPWM(pwm);
         
-        //route
-        const float pitch_speed = 30.0;
-        const float pitch_min = 45.0;
-        const float pitch_max = 90.0;
-        if(is_down){
-            target_pitch -= pitch_speed * (float)cycle_time_us * 0.000001;
-            if(target_pitch < pitch_min){
-                target_pitch = pitch_min;
-                is_down = false;
-            }
-        }else{
-            target_pitch += pitch_speed * (float)cycle_time_us * 0.000001;
-            if(target_pitch > pitch_max){
-                target_pitch = pitch_max;
-                is_down = true;
-            }
+        pwm += 10;
+        
+        if(pwm > 5000){
+            pwm = -5000;
         }
-        
-        //pid control
-        int pwm_yaw = (int)yaw_pid.calc(0, yawDeg(), (float)cycle_time_us * 0.000001);
-        int pwm_pitch = (int)pitch_pid.calc(target_pitch, pitchDeg(), (float)cycle_time_us * 0.000001);
-        printf("PWM yaw:%d pitch:%d\r\n", pwm_yaw, pwm_pitch);
-        yawPWM(pwm_yaw);
-        pitchPWM(pwm_pitch);
     }else{
         printf("error\r\n");
     }
+    
+//    static bool is_first = true;
+//    static float target_pitch = 90;
+//    static bool is_down = true;
+//    
+//    if(motor1.isValid() && motor2.isValid()){
+//        printf("[motor1]current:%d[mA] deg:%d\r\n", (int)yawCurrent(), (int)yawDeg());
+//        printf("[motor2]current:%d[mA] deg:%d\r\n", (int)pitchCurrent(), (int)pitchDeg());
+//        pwmServoSetDeg(0);
+//        //eyes.setEyes(0, 0, 0);
+//        
+//        //route
+//        const float pitch_speed = 30.0;
+//        const float pitch_min = 45.0;
+//        const float pitch_max = 90.0;
+//        if(is_down){
+//            target_pitch -= pitch_speed * (float)cycle_time_us * 0.000001;
+//            if(target_pitch < pitch_min){
+//                target_pitch = pitch_min;
+//                is_down = false;
+//            }
+//        }else{
+//            target_pitch += pitch_speed * (float)cycle_time_us * 0.000001;
+//            if(target_pitch > pitch_max){
+//                target_pitch = pitch_max;
+//                is_down = true;
+//            }
+//        }
+//        
+//        //pid control
+//        int pwm_yaw = (int)yaw_pid.calc(0, yawDeg(), (float)cycle_time_us * 0.000001);
+//        int pwm_pitch = (int)pitch_pid.calc(target_pitch, pitchDeg(), (float)cycle_time_us * 0.000001);
+//        printf("PWM yaw:%d pitch:%d\r\n", pwm_yaw, pwm_pitch);
+//        yawPWM(pwm_yaw);
+//        pitchPWM(pwm_pitch);
+//    }else{
+//        printf("error\r\n");
+//    }
 }
 
 void Framework::device_task(){
