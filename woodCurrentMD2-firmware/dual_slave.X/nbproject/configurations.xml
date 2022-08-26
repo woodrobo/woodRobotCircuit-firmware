@@ -26,6 +26,7 @@
       </logicalFolder>
       <itemPath>motorController.h</itemPath>
       <itemPath>master_communication.h</itemPath>
+      <itemPath>buffer.h</itemPath>
     </logicalFolder>
     <logicalFolder name="LinkerScript"
                    displayName="Linker Files"
@@ -55,6 +56,7 @@
       <itemPath>main.c</itemPath>
       <itemPath>motorController.c</itemPath>
       <itemPath>master_communication.c</itemPath>
+      <itemPath>buffer.c</itemPath>
     </logicalFolder>
     <logicalFolder name="ExternalFiles"
                    displayName="Important Files"

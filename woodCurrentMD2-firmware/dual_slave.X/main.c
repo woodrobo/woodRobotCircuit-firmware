@@ -47,13 +47,14 @@
 */
 #include "mcc_generated_files/system.h"
 #include "mcc_generated_files/master.h"
-#include "motorController.h"
-#include "master_communication.h"
 #include "mcc_generated_files/adc1.h"
-//#include "mcc_generated_files/tmr1.h"
 #include "mcc_generated_files/delay.h"
 #include "mcc_generated_files/pin_manager.h"
 #include "mcc_generated_files/pwm.h"
+
+#include "motorController.h"
+#include "master_communication.h"
+#include "buffer.h"
 
 /*
                          Main application
@@ -67,38 +68,42 @@ int16_t current_sensor_vol;
 //calibration
 int16_t current_sensor_offset = 0;
 
+//average current
+RingBuffer current_buffer;
+
 int main(void)
 {
     // initialize the device
     SYSTEM_Initialize();
     PWM_GeneratorEnable(PWM_GENERATOR_1);
     PWM_GeneratorEnable(PWM_GENERATOR_2);
-    //TMR1_Start();
+    
+    //電流バッファの初期化
+    bufferInit(&current_buffer);
     
     //電流センサのキャリブレーション
     bool calibration_flag = true;
     int calibration_count = 0;
+    uint32_t offset_32bit = 0;
     while(calibration_flag){
         //PWMと同期して電流値を取得
         while(!ADC1_IsConversionComplete(channel_S1AN16));
-        current_sensor_offset += ADC1_ConversionResultGet(channel_S1AN16);
+        offset_32bit += ADC1_ConversionResultGet(channel_S1AN16);
         calibration_count++;
-        if(calibration_count >= 4){
-            current_sensor_offset = (current_sensor_offset >> 2);
+        if(calibration_count >= 32){
+            current_sensor_offset = (offset_32bit >> 5);
             calibration_flag = false;
         }
     }
     
     while (1)
     {
-        IO_RB5_SetHigh();
-        DELAY_microseconds(2);
         //MASTERとのメールボックス処理
         if(MASTER_ProtocolOrderRead((ProtocolOrder_DATA*) &order)){
             if(order.ProtocolA[0] == SLAVE_MODE_VOLTAGE){
                 motorVoltageController(true, order.ProtocolA[1]);
                 current_control = false;
-            }else if(order.ProtocolA[1] == SLAVE_MODE_CURRENT){
+            }else if(order.ProtocolA[0] == SLAVE_MODE_CURRENT){
                 target_current = order.ProtocolA[1];
                 current_control = true;
             }else{
@@ -107,17 +112,21 @@ int main(void)
             }
             
             ProtocolMonitor_DATA monitor;
-            monitor.ProtocolB[0] = current_sensor_vol;
+            //monitor.ProtocolB[0] = current_sensor_vol;
+            monitor.ProtocolB[0] = bufferGetAverage(&current_buffer);
             MASTER_ProtocolMonitorWrite((ProtocolMonitor_DATA*) &monitor);
         }
-        IO_RB5_SetLow();
         
         //PWMと同期して電流値を取得
         while(!ADC1_IsConversionComplete(channel_S1AN16));
+        IO_RB5_SetHigh();
+        //DELAY_microseconds(2);
         current_sensor_vol = ADC1_ConversionResultGet(channel_S1AN16) - current_sensor_offset;
+        bufferPush(&current_buffer, current_sensor_vol);
         if(current_control){
-            motorCurrentController(target_current);
+            motorCurrentController(target_current, current_sensor_vol);
         }
+        IO_RB5_SetLow();
     }
     return 1; 
 }

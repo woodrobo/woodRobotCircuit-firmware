@@ -48,18 +48,18 @@
 #include "clock.h"
 #include "system.h"
 #include "system_types.h"
+#include "delay.h"
 #include "pwm.h"
+#include "adc1.h"
+#include "master.h"
 #include "interrupt_manager.h"
 #include "traps.h"
-#include "master.h"
-#include "delay.h"
-#include "adc1.h"
 
 void SYSTEM_Initialize(void)
 {
     PIN_MANAGER_Initialize();
-    INTERRUPT_Initialize();
     CLOCK_Initialize();
+    INTERRUPT_Initialize();
     MASTER_Initialize();
     ADC1_Initialize();
     PWM_Initialize();

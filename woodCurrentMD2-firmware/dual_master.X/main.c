@@ -63,7 +63,7 @@
 //debug UART 1MHz
 
 #define ADDRESS_MAINBOARD   8
-#define ADDRESS_THIS_BOARD  12
+#define ADDRESS_THIS_BOARD  13
 
 #define MODE_VOLTAGE        0
 #define MODE_CURRENT        1
@@ -133,6 +133,7 @@ int main(void)
                         switch(receive_data.data[0]){
                             case MODE_VOLTAGE:
                                 motorOutput(SLAVE_MODE_VOLTAGE, value);
+                                //motorOutput(SLAVE_MODE_CURRENT, 100);
                                 break;
                             case MODE_CURRENT:
                                 motorOutput(SLAVE_MODE_CURRENT, value);

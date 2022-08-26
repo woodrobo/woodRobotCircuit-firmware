@@ -18,7 +18,7 @@ namespace Framework{
 
             //debug
             unsigned int elapsed_time_us = (CORETIMER_CounterGet() - start) / (CORETIMER_FrequencyGet() / 1000000);
-            printf("[framework]elapsed_time:%u[us]\r\n", elapsed_time_us);
+            //printf("[framework]elapsed_time:%u[us]\r\n", elapsed_time_us);
             
             //wait
             unsigned int cycle_time_counter = CORETIMER_FrequencyGet() / 1000000 * cycle_time_us;
