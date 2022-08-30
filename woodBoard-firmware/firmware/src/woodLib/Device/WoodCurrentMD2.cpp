@@ -59,6 +59,10 @@ int16_t WoodCurrentMD2::getCurrentSensor(){
     return this->current_sensor;
 }
 
+int16_t WoodCurrentMD2::getEncoder(){
+    return this->encoder;
+}
+
 void WoodCurrentMD2::communicate(){
     for(int i=0;i<3;i++){
         WoodRS485Data send_data, recv_data;
@@ -88,10 +92,11 @@ void WoodCurrentMD2::communicate(){
 
         this->is_valid = false;
         if(RS485Device::recv(&recv_data, 1000)){
-            if(recv_data.sender_address == this->address && recv_data.size == 4){
+            if(recv_data.sender_address == this->address && recv_data.size == 6){
                 this->is_valid = true;
                 this->current_sensor = ((recv_data.data[0] << 8) & 0xff00) | ((recv_data.data[1] << 0) & 0x00ff);
                 this->adc_port = ((recv_data.data[2] << 8) & 0xff00) | ((recv_data.data[3] << 0) & 0x00ff);
+                this->encoder = ((recv_data.data[4] << 8) & 0xff00) | ((recv_data.data[5] << 0) & 0x00ff);
             }
         }
         

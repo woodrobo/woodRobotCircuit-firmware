@@ -67,18 +67,6 @@ void INTERRUPT_Initialize (void)
     //    URXI: UART2 RX
     //    Priority: 1
         IPC6bits.U2RXIP = 1;
-    //    UEVTI: UART1 Event
-    //    Priority: 1
-        IPC47bits.U1EVTIP = 1;
-    //    UTXI: UART1 TX
-    //    Priority: 1
-        IPC3bits.U1TXIP = 1;
-    //    UEI: UART1 Error Interrupt
-    //    Priority: 1
-        IPC12bits.U1EIP = 1;
-    //    URXI: UART1 RX
-    //    Priority: 1
-        IPC2bits.U1RXIP = 1;
     //    ADCAN19: ADC AN19 Convert Done
     //    Priority: 1
         IPC27bits.ADCAN19IP = 1;
@@ -94,6 +82,18 @@ void INTERRUPT_Initialize (void)
     //    ADCAN20: ADC AN20 Convert Done
     //    Priority: 1
         IPC27bits.ADCAN20IP = 1;
+    //    UEVTI: UART1 Event
+    //    Priority: 1
+        IPC47bits.U1EVTIP = 1;
+    //    UTXI: UART1 TX
+    //    Priority: 1
+        IPC3bits.U1TXIP = 1;
+    //    UEI: UART1 Error Interrupt
+    //    Priority: 1
+        IPC12bits.U1EIP = 1;
+    //    URXI: UART1 RX
+    //    Priority: 1
+        IPC2bits.U1RXIP = 1;
     //    TI: Timer 1
     //    Priority: 1
         IPC0bits.T1IP = 1;

@@ -19,6 +19,7 @@ public:
     //sensor
     uint16_t getADCPort();
     int16_t getCurrentSensor();
+    int16_t getEncoder();
     
     void communicate() override;
 protected:
@@ -30,7 +31,7 @@ protected:
     int pwm, max_pwm;
     int current, max_current;
     uint16_t adc_port;
-    int16_t current_sensor;
+    int16_t current_sensor, encoder;
     MODE mode;
 };
 

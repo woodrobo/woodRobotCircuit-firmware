@@ -83,29 +83,29 @@ void Framework::main_task(){
     static int current_time = 0;
     
     if(motor1.isValid()){
-        //printf("[motor1 sensor]current:%d adc_port:%u\r\n", motor1.getCurrentSensor(), motor1.getADCPort());
-        //printf("               current:%d[mA]\r\n", (int)((float)motor1.getCurrentSensor() * ADVALUE_TO_MILLIAMPARE)); 
-        //motor1.setPWM(pwm);
-        pwm += 10;
-        
-        if(pwm > 5000){
-            pwm = -5000;
-        }
-        
-        current_time++;
-        if(current_time >= 200){
-            current_time = 0;
-            if(current_index < 9){
-                current_index++;
-            }else{
-                current_index = 0;
-            }
-            
-            if(current_index >= 8){
-                current = 10 * 1000 / ADVALUE_TO_MILLIAMPARE;
-            }else{
-                current = 0;
-            }
+        printf("[motor1 sensor]current:%d adc_port:%u encoder:%d\r\n", motor1.getCurrentSensor(), motor1.getADCPort(), motor1.getEncoder());
+        printf("               current:%d[mA]\r\n", (int)((float)motor1.getCurrentSensor() * ADVALUE_TO_MILLIAMPARE)); 
+        motor1.setPWM(1000);
+//        pwm += 10;
+//        
+//        if(pwm > 5000){
+//            pwm = -5000;
+//        }
+//        
+//        current_time++;
+//        if(current_time >= 200){
+//            current_time = 0;
+//            if(current_index < 9){
+//                current_index++;
+//            }else{
+//                current_index = 0;
+//            }
+//            
+//            if(current_index >= 8){
+//                current = 10 * 1000 / ADVALUE_TO_MILLIAMPARE;
+//            }else{
+//                current = 0;
+//            }
             //current = current_index * 1000 / ADVALUE_TO_MILLIAMPARE;
            
 //            if(current > 0){
@@ -113,11 +113,11 @@ void Framework::main_task(){
 //            }else{
 //                current = 100;
 //            }
-        }
-        motor1.setCurrent(current);
+        //}
+        //motor1.setCurrent(current);
         
         //printf("%d,%d\r\n", (int)(current * ADVALUE_TO_MILLIAMPARE), (int)(motor1.getCurrentSensor() * ADVALUE_TO_MILLIAMPARE)); 
-        printf("%d,%d\r\n", current, motor1.getCurrentSensor()); 
+        //printf("%d,%d\r\n", current, motor1.getCurrentSensor()); 
     }else{
         printf("error\r\n");
     }
@@ -163,6 +163,6 @@ void Framework::main_task(){
 
 void Framework::device_task(){
     motor1.communicate();
-    motor2.communicate();
-    eyes.communicate();
+    //motor2.communicate();
+    //eyes.communicate();
 }

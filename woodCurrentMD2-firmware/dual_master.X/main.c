@@ -53,6 +53,7 @@
 #include "wood_rs485/wood_rs485.h"
 #include "slave_communication.h"
 #include "mcc_generated_files/slave1.h"
+#include "QEI.h"
 
 /*
                          Main application
@@ -63,7 +64,7 @@
 //debug UART 1MHz
 
 #define ADDRESS_MAINBOARD   8
-#define ADDRESS_THIS_BOARD  13
+#define ADDRESS_THIS_BOARD  12
 
 #define MODE_VOLTAGE        0
 #define MODE_CURRENT        1
@@ -112,6 +113,12 @@ int main(void)
     //timer
     TMR1_SetInterruptHandler(&timeover_callback);
     TMR1_Start();
+    //QEI
+    __builtin_write_RPCON(0x0000); // unlock PPS
+    RPINR14bits.QEIA1R = 38; //RB6->QEI1:QEIA
+    RPINR14bits.QEIB1R = 43; //RB11->QEI1:QEIB
+    __builtin_write_RPCON(0x0800); // lock PPS
+    QEI_setup(QEI_COUNT_POLARITY_POSITIVE);
     //RS485
     woodRS485Init(&rs485_manager, ADDRESS_THIS_BOARD);
     RS485_SW_PIN_SetLow();
@@ -150,16 +157,21 @@ int main(void)
                         adc_port_vol = ADC1_ConversionResultGet(channel_AN1);
                         //uint16_t current_sensor_vol = ADC1_ConversionResultGet(channel_AN2);
                         
+                        //get encoder data
+                        uint32_t encoder = QEI_read();
+                        
                         //make sensor data
                         WoodRS485Data send_data;
                         uint8_t send_buf[10];
                         int send_size;
                         send_data.receiver_address = receive_data.sender_address;
-                        send_data.size = 4;
+                        send_data.size = 6;
                         send_data.data[0] = (current_sensor_vol >> 8) & 0xff;
                         send_data.data[1] = (current_sensor_vol >> 0) & 0xff;
-                        send_data.data[2] = (adc_port_vol >> 8) & 0xff;;
-                        send_data.data[3] = (adc_port_vol >> 0) & 0xff;;
+                        send_data.data[2] = (adc_port_vol >> 8) & 0xff;
+                        send_data.data[3] = (adc_port_vol >> 0) & 0xff;
+                        send_data.data[4] = (encoder >> 8) & 0xff;
+                        send_data.data[5] = (encoder >> 0) & 0xff;
                         woodRS485MakeData(&rs485_manager, send_buf, &send_size, send_data);
                         rs485_physical_layer_write(send_buf, send_size);
                         
