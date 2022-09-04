@@ -2,14 +2,15 @@
 
 namespace Device{
 
-WoodCurrentMD2::WoodCurrentMD2(uint8_t address, int max_pwm, int max_current) : RS485Device(address){
-    if(max_pwm > 8800){
-        max_pwm = 8800;
+WoodCurrentMD2::WoodCurrentMD2(uint8_t address, bool is_output_inverse, int max_pwm, float max_current) : RS485Device(address){
+    if(max_pwm > 10000){
+        max_pwm = 10000;
     }
-    if(max_current > 10000){
-        max_current = 10000;
+    if(max_current > 20.0){
+        max_current = 20.0;
     }
     this->mode = MODE_VOLTAGE;
+    this->is_output_inverse = is_output_inverse;
     this->max_pwm = max_pwm;
     this->max_current = max_current;
     
@@ -17,9 +18,10 @@ WoodCurrentMD2::WoodCurrentMD2(uint8_t address, int max_pwm, int max_current) : 
     this->current = 0;
     this->adc_port = 0;
     this->current_sensor = 0;
+    this->encoder = 0;
 }
 
-WoodCurrentMD2::WoodCurrentMD2(uint8_t address) : WoodCurrentMD2(address, 8800, 10000){
+WoodCurrentMD2::WoodCurrentMD2(uint8_t address) : WoodCurrentMD2(address, false, 10000, 20.0){
     //none
 }
 
@@ -37,7 +39,7 @@ int WoodCurrentMD2::getMaxPWM(){
     return this->max_pwm;
 }
 
-void WoodCurrentMD2::setCurrent(int value){
+void WoodCurrentMD2::setCurrent(float value){
     if(value > this->max_current){
         value = max_current;
     }else if(value < -this->max_current){
@@ -47,7 +49,7 @@ void WoodCurrentMD2::setCurrent(int value){
     this->current = value;
 }
 
-int WoodCurrentMD2::getMaxCurrent(){
+float WoodCurrentMD2::getMaxCurrent(){
     return this->max_current;
 }
 
@@ -55,8 +57,8 @@ uint16_t WoodCurrentMD2::getADCPort(){
     return this->adc_port;
 }
 
-int16_t WoodCurrentMD2::getCurrentSensor(){
-    return this->current_sensor;
+float WoodCurrentMD2::getCurrentSensor(){
+    return this->current_sensor * WoodCurrentMD2_ADVALUE_TO_AMPERE;
 }
 
 int16_t WoodCurrentMD2::getEncoder(){
@@ -64,6 +66,8 @@ int16_t WoodCurrentMD2::getEncoder(){
 }
 
 void WoodCurrentMD2::communicate(){
+    int16_t current_value;
+    
     for(int i=0;i<3;i++){
         WoodRS485Data send_data, recv_data;
     
@@ -75,10 +79,11 @@ void WoodCurrentMD2::communicate(){
                 send_data.data[2] = pwm & 0xff;
                 break;
             case MODE_CURRENT:
+                current_value = this->current / WoodCurrentMD2_ADVALUE_TO_AMPERE;
                 send_data.size = 3;
                 send_data.data[0] = 1;
-                send_data.data[1] = (current >> 8) & 0xff;
-                send_data.data[2] = current & 0xff;
+                send_data.data[1] = (current_value >> 8) & 0xff;
+                send_data.data[2] = current_value & 0xff;
                 break;
             default:
                 send_data.size = 3;

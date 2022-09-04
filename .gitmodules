@@ -7,3 +7,6 @@
 [submodule "woodCurrentMD2-firmware/dual_master.X/wood_rs485"]
 	path = woodCurrentMD2-firmware/dual_master.X/wood_rs485
 	url = https://github.com/woodrobo/wood_rs485.git
+[submodule "arduino_woodrs485/woodCurrentMD2_sample/wood_rs485"]
+	path = arduino_woodrs485/woodCurrentMD2_sample/src/wood_rs485
+	url = https://github.com/woodrobo/wood_rs485.git
