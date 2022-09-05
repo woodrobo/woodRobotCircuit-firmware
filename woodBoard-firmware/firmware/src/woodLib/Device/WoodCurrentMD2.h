@@ -5,7 +5,7 @@
 
 namespace Device{
     
-const float WoodCurrentMD2_ADVALUE_TO_AMPERE = 3300.0 / 4096.0 / (66.0 * 10.0 / 14.7);    //ACS712 30A -> 66mV/A and voltage divider
+extern float WoodCurrentMD2_ADVALUE_TO_AMPERE;
 
 class WoodCurrentMD2 : public RS485Device{
 public:

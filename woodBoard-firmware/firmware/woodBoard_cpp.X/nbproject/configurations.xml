@@ -49,6 +49,9 @@
           <itemPath>../src/woodLib/Device/RS485Device.h</itemPath>
           <itemPath>../src/woodLib/Device/WoodCurrentMD2.h</itemPath>
         </logicalFolder>
+        <logicalFolder name="f4" displayName="Filter" projectFiles="true">
+          <itemPath>../src/woodLib/Filter/LowPassFilter.h</itemPath>
+        </logicalFolder>
         <logicalFolder name="f2" displayName="Framework" projectFiles="true">
           <itemPath>../src/woodLib/Framework/framework.h</itemPath>
         </logicalFolder>
@@ -111,6 +114,9 @@
         <logicalFolder name="f1" displayName="Device" projectFiles="true">
           <itemPath>../src/woodLib/Device/RS485Device.cpp</itemPath>
           <itemPath>../src/woodLib/Device/WoodCurrentMD2.cpp</itemPath>
+        </logicalFolder>
+        <logicalFolder name="f4" displayName="Filter" projectFiles="true">
+          <itemPath>../src/woodLib/Filter/LowPassFilter.cpp</itemPath>
         </logicalFolder>
         <logicalFolder name="f2" displayName="Framework" projectFiles="true">
           <itemPath>../src/woodLib/Framework/framework.cpp</itemPath>

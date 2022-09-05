@@ -1,6 +1,8 @@
 #include "WoodCurrentMD2.h"
 
 namespace Device{
+    
+float WoodCurrentMD2_ADVALUE_TO_AMPERE = 3300.0 / 4096.0 / (66.0 * 10.0 / 14.7);    //ACS712 30A -> 66mV/A and voltage divider
 
 WoodCurrentMD2::WoodCurrentMD2(uint8_t address, bool is_output_inverse, int max_pwm, float max_current) : RS485Device(address){
     if(max_pwm > 10000){
@@ -26,6 +28,10 @@ WoodCurrentMD2::WoodCurrentMD2(uint8_t address) : WoodCurrentMD2(address, false,
 }
 
 void WoodCurrentMD2::setPWM(int value){
+    if(this->is_output_inverse){
+        value = -value;
+    }
+    
     if(value > this->max_pwm){
         value = max_pwm;
     }else if(value < -this->max_pwm){
@@ -40,6 +46,10 @@ int WoodCurrentMD2::getMaxPWM(){
 }
 
 void WoodCurrentMD2::setCurrent(float value){
+    if(this->is_output_inverse){
+        value = -value;
+    }
+        
     if(value > this->max_current){
         value = max_current;
     }else if(value < -this->max_current){
@@ -58,6 +68,9 @@ uint16_t WoodCurrentMD2::getADCPort(){
 }
 
 float WoodCurrentMD2::getCurrentSensor(){
+    if(is_output_inverse){
+        return -this->current_sensor * WoodCurrentMD2_ADVALUE_TO_AMPERE;
+    }
     return this->current_sensor * WoodCurrentMD2_ADVALUE_TO_AMPERE;
 }
 
